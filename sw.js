@@ -4,6 +4,7 @@ const files = [
   "./",
   "index.html",
   "manifest.json",
+  "sw.js",
   "music.mp3",
   "bg1.jpg",
   "bg2.jpg",
@@ -11,7 +12,7 @@ const files = [
   "icon-512.png"
 ];
 
-// Óñòàíîâêà: ñîõðàíåíèÿ ôàéëîâ â êýø
+// Ð£ÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ°: ÑÐ¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ð¸Ðµ Ñ„Ð°Ð¹Ð»Ð¾Ð² Ð² ÐºÑÑˆ
 self.addEventListener("install", e => {
   e.waitUntil(
     caches.open(cacheName)
@@ -20,12 +21,12 @@ self.addEventListener("install", e => {
   );
 });
 
-// Àêòèâàöèÿ
+// ÐÐºÑ‚Ð¸Ð²Ð°Ñ†Ð¸Ñ
 self.addEventListener("activate", e => {
   e.waitUntil(self.clients.claim());
 });
 
-// Ïåðåõâàò çàïðîñîâ (ðàáîòà îôôëàéí)
+// ÐŸÐµÑ€ÐµÑ…Ð²Ð°Ñ‚ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ¾Ð² (Ñ€Ð°Ð±Ð¾Ñ‚Ð° Ð¾Ñ„Ñ„Ð»Ð°Ð¹Ð½)
 self.addEventListener("fetch", e => {
   e.respondWith(
     caches.match(e.request)
