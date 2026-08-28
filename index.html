@@ -2,10 +2,13 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Привет, name!</title>
     
-    <!-- ПОДКЛЮЧАЕМ МАНИФЕСТ -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000000">
 
@@ -22,92 +25,106 @@
             background-color: #000000;
             height: 100vh;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* Центрируем невидимый контейнер строго по вашей радужной рамке */
-        .center {
-            position: absolute;
-            top: 61.5%; /* Смещаем контейнер чуть ниже, прямо на уровень радужной полосы */
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        /* Контейнер теперь имеет точные пропорции вашей нарисованной радужной панели */
+        /* Контейнер теперь гибкий и занимает максимум 90% ширины экрана телефона */
         #formBlock {
-            width: 550px;  /* Ширина всей нарисованной рамки (от ENTER до OKEY) */
-            height: 80px;  /* Высота нарисованной рамки */
+            width: 90%;
+            max-width: 580px; /* На ПК он не станет больше 580px */
+            /* Используем aspect-ratio, чтобы блок сжимался пропорционально вашей картинке */
+            aspect-ratio: 580 / 60; 
             position: relative;
-            background: transparent; /* УБРАЛИ ЧЕРНОЕ ОКНО И ФИОЛЕТОВУЮ РАМКУ */
+            background: transparent; 
             padding: 0;
             border: none;
             box-shadow: none;
+            /* Смещаем блок на уровень вашей радужной полосы на фоне */
+            margin-top: 12vh; 
         }
 
         #formBlock h2 {
-            display: none; /* Прячем текст «ВВЕДИ СВОЁ ИМЯ» */
+            display: none; 
         }
 
-        /* Поле ввода встает точно в левую черную область фоновой картинки */
+        /* Адаптивное поле ввода */
         input[type="text"] {
             position: absolute;
-            left: 5%;         /* Отступ слева внутри контейнера */
+            left: 2%;         
             top: 50%;
             transform: translateY(-50%);
-            width: 44%;       /* Растягиваем поле на всю длину черного окошка */
-            height: 50px;     /* Высота под рамку */
-            background: transparent; /* Делаем поле полностью прозрачным */
-            border: none;     /* Убираем рамку */
-            outline: none;    /* Убираем контур при клике */
-            color: #ffffff;   /* Цвет букв, когда пользователь пишет имя */
-            font-size: 24px;
+            width: 50%;       
+            height: 80%; /* Высота подстраивается под пропорции рамки */    
+            background: transparent; 
+            border: none;     
+            outline: none;    
+            color: #39ff14;   
+            font-size: 4.5vw; /* Размер шрифта зависит от ширины экрана */
             font-weight: bold;
             font-family: sans-serif;
-            padding: 0 15px;
+            padding: 0 2%;
             box-sizing: border-box;
         }
 
-        /* Желтая кнопка ok.png встает точно поверх нарисованной OKEY */
+        /* Адаптивная желтая кнопка ok.png */
         #okButton {
             position: absolute;
-            right: 4.5%;      /* Отступ справа внутри контейнера */
+            right: 2%;        
             top: 50%;
             transform: translateY(-50%);
-            width: 35%;       /* Растягиваем картинку точно по размеру нарисованной кнопки */
-            height: 54px;     /* Высота кнопки */
+            width: 35.5%;     
+            height: 85%; /* Высота подстраивается под пропорции кнопки */
             cursor: pointer;
+            object-fit: contain; /* Картинка внутри кнопки не будет искажаться */
             transition: transform 0.1s ease, filter 0.2s ease;
         }
 
-        /* Эффект легкого свечения при наведении на кнопку */
         #okButton:hover {
             filter: brightness(1.2);
         }
 
-        /* Эффект нажатия (кнопка слегка вдавливается) */
         #okButton:active {
             transform: translateY(-50%) scale(0.96);
         }
 
-        /* Экран финального приветствия (оставляем аккуратное окошко) */
+        /* Экран финального приветствия */
         #messageBlock {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             background: rgba(0, 0, 0, 0.85);
-            padding: 30px;
+            padding: 25px;
             border-radius: 15px;
-            min-width: 300px;
+            width: 80%;
+            max-width: 300px;
             border: 3px solid #00ffff;
             box-shadow: 0 0 20px #00ffff;
+            box-sizing: border-box;
+        }
+
+        /* НАСТРОЙКИ ДЛЯ БОЛЬШИХ ЭКРАНОВ (ПК) */
+        @media (min-width: 600px) {
+            input[type="text"] {
+                font-size: 26px; /* Фиксированный крупный шрифт для мониторов */
+            }
+            #formBlock {
+                margin-top: 15vh; /* Корректировка высоты для ПК */
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="center" id="formBlock">
+<div id="formBlock">
     <h2>Введи своё имя</h2>
     <input type="text" id="nameInput" placeholder="" autocomplete="off">
     <img src="ok.png" id="okButton" alt="OKEY">
 </div>
 
-<div class="center" id="messageBlock" style="display:none;">
+<div id="messageBlock" style="display:none;">
     <h1 id="messageText"></h1>
 </div>
 
@@ -137,7 +154,6 @@
         }
     });
 
-    // РЕГИСТРАЦИЯ SERVICE WORKER
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('sw.js')
