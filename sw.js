@@ -1,4 +1,4 @@
-const cacheName = "greeting-v1";
+const cacheName = "greeting-v2"; // Обновили версию, чтобы браузер перекачал все файлы
 
 const files = [
   "./",
@@ -6,10 +6,16 @@ const files = [
   "manifest.json",
   "sw.js",
   "music.mp3",
+  "icon-512.png",
   "bg1.jpg",
   "bg2.jpg",
   "bg3.jpg",
-  "icon-512.png"
+  "1.jpg",
+  "2.jpg",
+  "3.jpg",
+  "4.jpg",
+  "5.jpg",
+  "6.jpg"
 ];
 
 // Установка: сохранение файлов в кэш
@@ -21,9 +27,19 @@ self.addEventListener("install", e => {
   );
 });
 
-// Активация
+// Активация: удаление старых кэшей и запуск нового SW
 self.addEventListener("activate", e => {
-  e.waitUntil(self.clients.claim());
+  e.waitUntil(
+    caches.keys().then(keys => {
+      return Promise.all(
+        keys.map(key => {
+          if (key !== cacheName) {
+            return caches.delete(key);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
+  );
 });
 
 // Перехват запросов (работа оффлайн)
