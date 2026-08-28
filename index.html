@@ -1,3 +1,14 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Привет, name!</title>
+    
+    <!-- ПОДКЛЮЧАЕМ МАНИФЕСТ -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+
     <style>
         body {
             margin: 0;
@@ -13,68 +24,71 @@
             overflow: hidden;
         }
 
-        /* Центрируем и опускаем контейнер точно на уровень радужной полосы */
+        /* Центрируем невидимый контейнер строго по вашей радужной рамке */
         .center {
             position: absolute;
-            top: 62%; /* Подогнали высоту, чтобы опустить элементы ниже */
+            top: 61.5%; /* Смещаем контейнер чуть ниже, прямо на уровень радужной полосы */
             left: 50%;
             transform: translate(-50%, -50%);
         }
 
-        /* Расширили контейнер, чтобы он покрывал всю нарисованную рамку */
+        /* Контейнер теперь имеет точные пропорции вашей нарисованной радужной панели */
         #formBlock {
-            width: 580px;  /* Точная ширина всей вашей нарисованной панели */
-            height: 60px;  /* Высота внутренней черной зоны */
+            width: 550px;  /* Ширина всей нарисованной рамки (от ENTER до OKEY) */
+            height: 80px;  /* Высота нарисованной рамки */
             position: relative;
-            background: transparent; 
+            background: transparent; /* УБРАЛИ ЧЕРНОЕ ОКНО И ФИОЛЕТОВУЮ РАМКУ */
             padding: 0;
             border: none;
             box-shadow: none;
         }
 
         #formBlock h2 {
-            display: none; 
+            display: none; /* Прячем текст «ВВЕДИ СВОЁ ИМЯ» */
         }
 
         /* Поле ввода встает точно в левую черную область фоновой картинки */
         input[type="text"] {
             position: absolute;
-            left: 2%;         /* Максимально прижали к левому краю рамки */
+            left: 5%;         /* Отступ слева внутри контейнера */
             top: 50%;
             transform: translateY(-50%);
-            width: 50%;       /* Растянули поле ровно до середины панели */
-            height: 46px;     /* Высота под внутреннее окошко */
-            background: transparent; 
-            border: none;     
-            outline: none;    
-            color: #39ff14;   /* Сделали вводимый текст неоново-зеленым под цвет ваших цифр */
-            font-size: 26px;  /* Крупный шрифт */
+            width: 44%;       /* Растягиваем поле на всю длину черного окошка */
+            height: 50px;     /* Высота под рамку */
+            background: transparent; /* Делаем поле полностью прозрачным */
+            border: none;     /* Убираем рамку */
+            outline: none;    /* Убираем контур при клике */
+            color: #ffffff;   /* Цвет букв, когда пользователь пишет имя */
+            font-size: 24px;
             font-weight: bold;
             font-family: sans-serif;
-            padding: 0 10px;
+            padding: 0 15px;
             box-sizing: border-box;
         }
 
-        /* Желтая кнопка ok.png растягивается и встает поверх нарисованной OKEY */
+        /* Желтая кнопка ok.png встает точно поверх нарисованной OKEY */
         #okButton {
             position: absolute;
-            right: 2%;        /* Прижали кнопку к самому правому краю рамки */
+            right: 4.5%;      /* Отступ справа внутри контейнера */
             top: 50%;
             transform: translateY(-50%);
-            width: 35.5%;     /* Увеличили ширину, чтобы кнопка полностью растянулась */
-            height: 52px;     /* Точная высота под нарисованную кнопку */
+            width: 35%;       /* Растягиваем картинку точно по размеру нарисованной кнопки */
+            height: 54px;     /* Высота кнопки */
             cursor: pointer;
             transition: transform 0.1s ease, filter 0.2s ease;
         }
 
+        /* Эффект легкого свечения при наведении на кнопку */
         #okButton:hover {
             filter: brightness(1.2);
         }
 
+        /* Эффект нажатия (кнопка слегка вдавливается) */
         #okButton:active {
             transform: translateY(-50%) scale(0.96);
         }
 
+        /* Экран финального приветствия (оставляем аккуратное окошко) */
         #messageBlock {
             background: rgba(0, 0, 0, 0.85);
             padding: 30px;
@@ -84,3 +98,52 @@
             box-shadow: 0 0 20px #00ffff;
         }
     </style>
+</head>
+<body>
+
+<div class="center" id="formBlock">
+    <h2>Введи своё имя</h2>
+    <input type="text" id="nameInput" placeholder="" autocomplete="off">
+    <img src="ok.png" id="okButton" alt="OKEY">
+</div>
+
+<div class="center" id="messageBlock" style="display:none;">
+    <h1 id="messageText"></h1>
+</div>
+
+<!-- Музыка -->
+<audio id="bgMusic" loop>
+    <source src="music.mp3" type="audio/mpeg">
+    Ваш браузер не поддерживает аудио.
+</audio>
+
+<script>
+    const okButton = document.getElementById('okButton');
+    const nameInput = document.getElementById('nameInput');
+    const formBlock = document.getElementById('formBlock');
+    const messageBlock = document.getElementById('messageBlock');
+    const messageText = document.getElementById('messageText');
+    const bgMusic = document.getElementById('bgMusic');
+
+    okButton.addEventListener('click', () => {
+        const name = nameInput.value.trim();
+        if (name !== "") {
+            bgMusic.play().catch(e => console.log("Музыка заблокирована браузером"));
+            formBlock.style.display = 'none';
+            messageBlock.style.display = 'block';
+            messageText.innerText = `Привет, ${name}!`;
+        } else {
+            alert("Пожалуйста, введи имя!");
+        }
+    });
+
+    // РЕГИСТРАЦИЯ SERVICE WORKER
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('SW зарегистрирован!'));
+        });
+    }
+</script>
+</body>
+</html>
