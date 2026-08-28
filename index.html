@@ -15,7 +15,6 @@
             font-family: Arial, sans-serif;
             text-align: center;
             color: #ffffff;
-            /* ВАШ ФОН: nik.png */
             background-image: url('nik.png'); 
             background-size: cover;
             background-position: center;
@@ -25,67 +24,71 @@
             overflow: hidden;
         }
 
-        /* Центрируем блок с полем и кнопкой */
+        /* Центрируем невидимый контейнер строго по вашей радужной рамке */
         .center {
             position: absolute;
-            top: 50%;
+            top: 61.5%; /* Смещаем контейнер чуть ниже, прямо на уровень радужной полосы */
             left: 50%;
             transform: translate(-50%, -50%);
         }
 
-        /* Блок под размеры вашей радужной рамки */
+        /* Контейнер теперь имеет точные пропорции вашей нарисованной радужной панели */
         #formBlock {
-            width: 610px;  
-            height: 140px; 
+            width: 550px;  /* Ширина всей нарисованной рамки (от ENTER до OKEY) */
+            height: 80px;  /* Высота нарисованной рамки */
             position: relative;
-            background: transparent; /* Делаем прозрачным, чтобы видеть радугу сзади */
+            background: transparent; /* УБРАЛИ ЧЕРНОЕ ОКНО И ФИОЛЕТОВУЮ РАМКУ */
             padding: 0;
+            border: none;
+            box-shadow: none;
         }
 
         #formBlock h2 {
-            display: none; /* Скрываем текст, ведь на картинке уже есть ENTER YOUR NAME */
+            display: none; /* Прячем текст «ВВЕДИ СВОЁ ИМЯ» */
         }
 
-        /* Поле ввода — встает ровно в левое черное окошко */
+        /* Поле ввода встает точно в левую черную область фоновой картинки */
         input[type="text"] {
             position: absolute;
-            left: 11%;
-            top: 52%;
+            left: 5%;         /* Отступ слева внутри контейнера */
+            top: 50%;
             transform: translateY(-50%);
-            width: 40%;
-            height: 42px;
-            background: transparent; 
-            border: none;
-            outline: none;
-            color: #ffffff;
+            width: 44%;       /* Растягиваем поле на всю длину черного окошка */
+            height: 50px;     /* Высота под рамку */
+            background: transparent; /* Делаем поле полностью прозрачным */
+            border: none;     /* Убираем рамку */
+            outline: none;    /* Убираем контур при клике */
+            color: #ffffff;   /* Цвет букв, когда пользователь пишет имя */
             font-size: 24px;
             font-weight: bold;
             font-family: sans-serif;
-            padding: 0 10px;
+            padding: 0 15px;
             box-sizing: border-box;
         }
 
-        /* ВАША КНОПКА: ok.png (встает ровно поверх нарисованной OKEY) */
+        /* Желтая кнопка ok.png встает точно поверх нарисованной OKEY */
         #okButton {
             position: absolute;
-            right: 11%;
-            top: 52%;
+            right: 4.5%;      /* Отступ справа внутри контейнера */
+            top: 50%;
             transform: translateY(-50%);
-            width: 32%; 
-            height: auto;
+            width: 35%;       /* Растягиваем картинку точно по размеру нарисованной кнопки */
+            height: 54px;     /* Высота кнопки */
             cursor: pointer;
             transition: transform 0.1s ease, filter 0.2s ease;
         }
 
+        /* Эффект легкого свечения при наведении на кнопку */
         #okButton:hover {
             filter: brightness(1.2);
         }
 
+        /* Эффект нажатия (кнопка слегка вдавливается) */
         #okButton:active {
-            transform: translateY(-50%) scale(0.95);
+            transform: translateY(-50%) scale(0.96);
         }
 
-        /* Блок финального сообщения */
+        /* Экран финального приветствия (оставляем аккуратное окошко) */
         #messageBlock {
             background: rgba(0, 0, 0, 0.85);
             padding: 30px;
@@ -101,7 +104,6 @@
 <div class="center" id="formBlock">
     <h2>Введи своё имя</h2>
     <input type="text" id="nameInput" placeholder="" autocomplete="off">
-    <!-- ЗДЕСЬ СТАВИМ ВАШУ КНОПКУ ok.png -->
     <img src="ok.png" id="okButton" alt="OKEY">
 </div>
 
@@ -112,11 +114,10 @@
 <!-- Музыка -->
 <audio id="bgMusic" loop>
     <source src="music.mp3" type="audio/mpeg">
-    Ваш browser не поддерживает аудио.
+    Ваш браузер не поддерживает аудио.
 </audio>
 
 <script>
-    // Логика работы кнопки
     const okButton = document.getElementById('okButton');
     const nameInput = document.getElementById('nameInput');
     const formBlock = document.getElementById('formBlock');
